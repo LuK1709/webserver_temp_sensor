@@ -4,6 +4,9 @@ from time import ctime, time
 from urllib.parse import urlparse, parse_qs
 import json
 from pathlib import Path
+import mysql.connector
+
+
 
 #hostName = "10.2.5.140"
 hostName = "127.0.0.1"
@@ -16,6 +19,15 @@ tempset = {
             "ort": "",
             "temp": ""
 }
+
+mydb = mysql.connector.connect(
+    host = "localhost", #enter the ip of raspberry here
+    user = "username", #enter db user
+    password = "password", #enter db pw 
+    database = "database" #enter db name
+)
+
+
 templist = []
 error_msg = {
     "problem": "",
@@ -168,6 +180,14 @@ class MyServer(BaseHTTPRequestHandler):
         response = json.dumps(appended_data)
         # Die Rückmeldung an den Client über den body der Webseite
         self.wfile.write(bytes(response, 'utf-8'))
+        mycursor = mydb.cursor()
+        sql = "INSERT INTO temperatures (temp, room) VALUES (%s,%s)"
+        val = (t,o)
+        mycursor.execute(sql,val)
+        mydb.commit()
+        
+        
+
 
     def append_data(self, ort, temp):
         global templist
