@@ -22,9 +22,9 @@ tempset = {
 
 mydb = mysql.connector.connect(
     host = "localhost", #enter the ip of raspberry here
-    user = "username", #enter db user
-    password = "password", #enter db pw 
-    database = "database" #enter db name
+    user = "user1", #enter db user
+    password = "password1", #enter db pw 
+    database = "DB01" #enter db name
 )
 
 
