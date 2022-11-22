@@ -9,7 +9,8 @@ import mysql.connector
 
 
 #hostName = "10.2.5.140"
-hostName = "127.0.0.1"
+#hostName = "127.0.0.1"
+hostName = "172.20.125.200"
 serverPort = 8080
 endpoint_temps = "/raumtemps"
 temps_fp = Path("/home/pi/temps.json")
