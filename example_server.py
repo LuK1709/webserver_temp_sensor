@@ -112,6 +112,7 @@ class MyServer(BaseHTTPRequestHandler):
                 # Nur Basispfad angegeben --> Alle Daten senden
                 #response = json.dumps(templist)
                 sql = "SELECT * FROM Tempsensor"
+                mycursor = mydb.cursor()
                 mycursor.execute(sql)
                 myresult = mycursor.fetchall()
                 for x in myresult:
