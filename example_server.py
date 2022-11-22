@@ -182,7 +182,7 @@ class MyServer(BaseHTTPRequestHandler):
         # Die Rückmeldung an den Client über den body der Webseite
         self.wfile.write(bytes(response, 'utf-8'))
         mycursor = mydb.cursor()
-        sql = "INSERT INTO temperatures (temp, room) VALUES (%s,%s)"
+        sql = "INSERT INTO Tempsensor (temp, room) VALUES (%s,%s)"
         val = (t,o)
         mycursor.execute(sql,val)
         mydb.commit()
