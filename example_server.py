@@ -115,6 +115,7 @@ class MyServer(BaseHTTPRequestHandler):
                 mycursor = mydb.cursor()
                 mycursor.execute(sql)
                 myresult = mycursor.fetchall()
+                response =  myresult
                 for x in myresult:
                     print(x) 
                 self.send_response(200)
