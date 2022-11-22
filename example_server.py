@@ -110,7 +110,12 @@ class MyServer(BaseHTTPRequestHandler):
             # geliefert werden sollen (/raumtemps oder /raumtemps/7)
             if (len(endpoint.split("/")) == 2):
                 # Nur Basispfad angegeben --> Alle Daten senden
-                response = json.dumps(templist)
+                #response = json.dumps(templist)
+                sql = "SELECT * FROM Tempsensor"
+                mycursor.execute(sql)
+                myresult = mycursor.fetchall()
+                for x in myresult:
+                    print(x) 
                 self.send_response(200)
             elif (len(endpoint.split("/")) > 2) and not (str.isdigit(endpoint.split("/")[2])):
               # id ist nicht integer
@@ -182,7 +187,7 @@ class MyServer(BaseHTTPRequestHandler):
         # Die Rückmeldung an den Client über den body der Webseite
         self.wfile.write(bytes(response, 'utf-8'))
         mycursor = mydb.cursor()
-        sql = "INSERT INTO temperatures (temp, room) VALUES (%s,%s)"
+        sql = "INSERT INTO Tempsensor (temp, room) VALUES (%s,%s)"
         val = (t,o)
         mycursor.execute(sql,val)
         mydb.commit()
