@@ -129,17 +129,23 @@ class MyServer(BaseHTTPRequestHandler):
             else:
                 # Bestimmten Datensatz suchen und senden
                 id_set = int((endpoint.split("/"))[2])
-                print("id_set: ", id_set)
-                temp_set = list(
-                    filter(lambda data: data['id'] == id_set, templist))
-                print("temp_set: ", temp_set)
-                # Suchen in einer List of Dictionaries siehe
-                # https://stackoverflow.com/questions/8653516/python-list-of-dictionaries-search#comment18634157_8653568
-                if len(temp_set) > 0:
-                    # angefragten Datensatz gefunden, Ergebnis ist eine Liste
-                    response = json.dumps(temp_set[0])
-                    self.send_response(200)
+                # print("id_set: ", id_set)
+                # temp_set = list(
+                #     filter(lambda data: data['id'] == id_set, templist))
+                # print("temp_set: ", temp_set)
+                # # Suchen in einer List of Dictionaries siehe
+                # # https://stackoverflow.com/questions/8653516/python-list-of-dictionaries-search#comment18634157_8653568
+                # if len(temp_set) > 0:
+                #     # angefragten Datensatz gefunden, Ergebnis ist eine Liste
+                sql = "SELECT * FROM Tempsensor WHERE ID = %s"
+                mycursor = mydb.cursor()
+                mycursor.execute(sql,id_set)
+                myresult = mycursor.fetchall()
 
+                if(myresult is not None):
+                    response =  json.dumps(myresult)
+                    self.send_response(200)
+                
                 else:
                     # nicht gefunden
 
