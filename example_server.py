@@ -137,7 +137,7 @@ class MyServer(BaseHTTPRequestHandler):
                 # # https://stackoverflow.com/questions/8653516/python-list-of-dictionaries-search#comment18634157_8653568
                 # if len(temp_set) > 0:
                 #     # angefragten Datensatz gefunden, Ergebnis ist eine Liste
-                sql = "SELECT * FROM Tempsensor WHERE ID = %s"
+                sql = "SELECT * FROM Tempsensor WHERE ID = %d"
                 mycursor = mydb.cursor()
                 mycursor.execute(sql,id_set)
                 myresult = mycursor.fetchall()
