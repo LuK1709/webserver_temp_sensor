@@ -115,9 +115,7 @@ class MyServer(BaseHTTPRequestHandler):
                 mycursor = mydb.cursor()
                 mycursor.execute(sql)
                 myresult = mycursor.fetchall()
-                response =  myresult
-                for x in myresult:
-                    print(x) 
+                response =  json.dumps(myresult)
                 self.send_response(200)
             elif (len(endpoint.split("/")) > 2) and not (str.isdigit(endpoint.split("/")[2])):
               # id ist nicht integer
