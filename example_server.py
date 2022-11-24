@@ -86,8 +86,7 @@ class MyServer(BaseHTTPRequestHandler):
             sql = "DELETE FROM Tempsensor WHERE ID =" + str(id_set)
             #mycursor = mydb.cursor()
             mycursor.execute(sql)
-            myresult = mycursor.fetchall()
-            response = json.dumps(myresult)
+            response = json.dumps("{'Successfull': 'rows deleted'}")
             self.send_response(200)
         # if temp_set:
         #     templist
