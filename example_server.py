@@ -69,25 +69,39 @@ class MyServer(BaseHTTPRequestHandler):
             return
 
         id_set = int((endpoint.split("/"))[2])
-        print("id_set: ", id_set)
-        temp_set = list(filter(lambda data: data['id'] == id_set, templist))
-        print("temp_set: ", temp_set)
+        #print("id_set: ", id_set)
+        #temp_set = list(filter(lambda data: data['id'] == id_set, templist))
+        #print("temp_set: ", temp_set)
         # Suchen in einer List of Dictionaries siehe
         # https://stackoverflow.com/questions/8653516/python-list-of-dictionaries-search#comment18634157_8653568
         
-        if temp_set:
-            templist
-            # angefragten Datensatz gefunden, Ergebnis ist eine Liste
-            print("templist: ", templist)
-            print("temp_set[0]: ", temp_set[0])
-            templist.remove(temp_set[0])
-            print("Removed", templist)
-            response = json.dumps(templist)
-            self.send_response(200)
-        else:
-            print("MEH")
-            response = json.dumps("{'problem': 'meh'}")
+        sql = "SELECT * FROM Tempsensor WHERE ID =" + str(id_set)
+        mycursor = mydb.cursor()
+        mycursor.execute(sql)
+        myresult = mycursor.fetchall()
+        if(len(myresult) == 0):
+            response = json.dumps("{'problem': 'no entry found'}")
             self.send_response(404)
+        else:
+            sql = "DELETE FROM Tempsensor WHERE ID =" + str(id_set)
+            #mycursor = mydb.cursor()
+            mycursor.execute(sql)
+            myresult = mycursor.fetchall()
+            response = json.dumps(myresult)
+            self.send_response(200)
+        # if temp_set:
+        #     templist
+        #     # angefragten Datensatz gefunden, Ergebnis ist eine Liste
+        #     print("templist: ", templist)
+        #     print("temp_set[0]: ", temp_set[0])
+        #     templist.remove(temp_set[0])
+        #     print("Removed", templist)
+        #     response = json.dumps(templist)
+        #     self.send_response(200)
+        # else:
+        #     print("MEH")
+        #     response = json.dumps("{'problem': 'meh'}")
+        #     self.send_response(404)
             
         self.send_header("Content-type", "application/json")
         self.end_headers()
