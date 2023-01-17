@@ -119,7 +119,7 @@ class MyServer(BaseHTTPRequestHandler):
             if (len(endpoint.split("/")) == 2):
                 # Nur Basispfad angegeben --> Alle Daten senden
                 #response = json.dumps(templist)
-                sql = "SELECT TOP(1) temp FROM Tempsensor ORDER BY ID DESC"
+                sql = "SELECT temp FROM Tempsensor ORDER BY ID DESC LIMIT 1"
                 mycursor = mydb.cursor()
                 mycursor.execute(sql)
                 myresult = mycursor.fetchall()
