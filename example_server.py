@@ -119,7 +119,7 @@ class MyServer(BaseHTTPRequestHandler):
             if (len(endpoint.split("/")) == 2):
                 # Nur Basispfad angegeben --> Alle Daten senden
                 #response = json.dumps(templist)
-                sql = "SELECT * FROM Tempsensor"
+                sql = "SELECT TOP(1) temp FROM Tempsensor ORDER BY ID DESC"
                 mycursor = mydb.cursor()
                 mycursor.execute(sql)
                 myresult = mycursor.fetchall()
@@ -163,46 +163,6 @@ class MyServer(BaseHTTPRequestHandler):
                     error_msg["zeit"] = ctime(time())
                     response = json.dumps(error_msg)
                     self.send_response(400)  # 400 Bad Request
-        else:
-            # Keinen gültigen Endpunkt gefunden
-            error_msg["problem"] = "Fehlerhafte URL"
-            error_msg["nachricht"] = "Der Endpunkt " + \
-                endpoint + " existiert nicht im System!"
-            error_msg["zeit"] = ctime(time())
-            # Datensatz von Dictionary in String wandeln (Serialize)
-            response = json.dumps(error_msg)
-            # Nachricht über den Misserfolg, der eingegangenen Anfrage, 404 Not Found
-            self.send_response(404)
-
-        # Headerinformation über den Datentyp, der im Body zurückgesendet wird
-        self.send_header("Content-type", "application/json")
-        self.end_headers()  # Header zu Ende
-        # Die Rückmeldung an den Client über den body der Webseite
-        self.wfile.write(bytes(response, 'utf-8'))
-
-    def do_GET_Newest(self):
-        global templist
-        global temp_set
-        global error_msg
-
-        print("Habe einen Request:")
-        endpoint = (urlparse(self.path)).path  # Endpunkt bestimmen
-        if endpoint[len(endpoint)-1] == '/':
-            # falls jemand am Ende einen / eingegeben hat, muss der weg
-            endpoint = endpoint[:-1]
-        if endpoint.startswith(endpoint_temps):
-            # Endpunkt für Temperaturbearbeitung
-            # nun Endpunkt beim / trennen, um herauszufinden, ob alle Datensätze oder ein spezieller
-            # geliefert werden sollen (/raumtemps oder /raumtemps/7)
-            if (len(endpoint.split("/")) == 2):
-                # Nur Basispfad angegeben --> Alle Daten senden
-                #response = json.dumps(templist)
-                sql = "SELECT TOP(1) temp FROM Tempsensor ORDER BY ID DESC"
-                mycursor = mydb.cursor()
-                mycursor.execute(sql)
-                myresult = mycursor.fetchall()
-                response =  json.dumps(myresult)
-                self.send_response(200)
         else:
             # Keinen gültigen Endpunkt gefunden
             error_msg["problem"] = "Fehlerhafte URL"
